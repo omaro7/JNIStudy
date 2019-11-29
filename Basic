@@ -1,0 +1,64 @@
+/**
+* goms.h
+* Goms URL
+*/
+
+   
+char* URL_SERVER           = "http://www.goms.co.kr/";
+char* URL_APP_SERVER       = "http://app.goms.co.kr/";
+
+// DEV
+char* CODE_DEV      = "0";
+// TEST
+char* CODE_TEST     = "1";
+// REAL
+char* CODE_REAL     = "2";
+
+---------------------------------------
+/**
+* goms.c
+* Goms URL
+*/
+JNIEXPORT jstring JNICALL
+Java_kr_co_goms_GomsJNI_getServerURL(JNIEnv *env, jobject obj) {
+    return (*env)->NewStringUTF(env, URL_SERVER);
+}
+
+JNIEXPORT jstring JNICALL
+Java_kr_co_goms_GomsJNI_getServerURL(JNIEnv *env, jobject obj, jstring _num) {
+    const char *num = (*env)->GetStringUTFChars(env, _num, NULL);
+    char code[strlen(num) + 1];
+    strcpy(code, num);
+    (*env)->ReleaseStringUTFChars(env, _num, num);
+
+    if (strcmp(code, CODE_DEV) == 0)
+        return (*env)->NewStringUTF(env, URL_APP_SERVER);
+    else if (strcmp(code, CODE_TEST) == 0)
+        return (*env)->NewStringUTF(env, URL_APP_SERVER);
+    else
+        return (*env)->NewStringUTF(env, URL_SERVER);
+}
+
+JNIEXPORT jstring JNICALL
+Java_kr_co_goms_GomsJNI_getServerURL(JNIEnv *env, jobject obj, jstring _appid) {
+    const char *appid = (*env)->GetStringUTFChars(env, _appid, NULL);
+    int appIdLen = strlen(appid);
+    char apppath[3 + appIdLen + 1];
+    strcpy(apppath, URL_SERVER);
+    strcat(apppath, appid);
+    (*env)->ReleaseStringUTFChars(env, _appid, appid);
+    return (*env)->NewStringUTF(env, apppath);
+}
+
+
+
+---------------------------------------
+/*
+* 사용법
+* Java
+*/
+
+String serverURL = GomsJNI.getServerURL();
+
+
+
