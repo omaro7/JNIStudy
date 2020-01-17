@@ -50,7 +50,18 @@ Java_kr_co_goms_GomsJNI_getServerURL(JNIEnv *env, jobject obj, jstring _appid) {
     return (*env)->NewStringUTF(env, apppath);
 }
 
+JNIEXPORT jstring JNICALL
+Java_kr_co_goms_GomsJNI_getServerID(JNIEnv *env, jobject obj, jstring _id) {
+    const char *origin = (*env)->GetStringUTFChars(env, _id, NULL);
 
+    // ID
+    int idLen = strlen(origin);
+    char *id = malloc(idLen + 1);
+    sprintf(id, "%s", origin);
+    
+    (*env)->ReleaseStringUTFChars(env, _id, origin);
+    return (*env)->NewStringUTF(env, id);
+)
 
 ---------------------------------------
 /*
